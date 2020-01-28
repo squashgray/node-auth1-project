@@ -1,19 +1,16 @@
 const express = require("express");
-
+const restricted = require("../middleware/restricted-middleware");
 const users = require("./user-model");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.get("/", restricted, (req, res) => {
   users
     .findUsers()
     .then(users => {
-      res.status(200).json(users);
+      res.json(users);
     })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ error: "didn't work" });
-    });
+    .catch(err => res.send(err));
 });
 
 module.exports = router;
